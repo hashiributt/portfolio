@@ -24,14 +24,14 @@
   }
 
   html[data-theme="dark"]{
-    --bg:#16171A;
-    --surface:#1F2023;
+    --bg:#0D0E11;
+    --surface:#16171B;
     --ink:#F2F1EE;
     --muted:#9A9C9F;
     --accent:#E2585A;
     --accent-soft:rgba(226,88,90,0.15);
-    --line:#2B2C30;
-    --card-bg:#1D1E21;
+    --line:#24252B;
+    --card-bg:#121317;
   }
 
   .force-repaint{
@@ -194,6 +194,94 @@
     section{padding:60px 22px;}
     .contact-wrap{grid-template-columns:1fr;}
   }
+
+  /* =========================================================
+     REDESIGN LAYER
+     ========================================================= */
+  :root{--glow:rgba(178,58,58,0.22);}
+  html[data-theme="dark"]{--glow:rgba(226,88,90,0.35);}
+
+  .scroll-progress{position:fixed;top:0;left:0;height:2px;width:0;z-index:200;
+    background:linear-gradient(90deg,var(--accent),#ff9a8b);box-shadow:0 0 10px var(--glow);}
+
+  nav{background-color:color-mix(in srgb,var(--bg) 72%,transparent);
+    backdrop-filter:saturate(160%) blur(14px);-webkit-backdrop-filter:saturate(160%) blur(14px);}
+  nav .brand::before{content:'>';color:var(--accent);font-family:var(--mono);margin-right:8px;}
+
+  /* hero backdrop: grid + glow */
+  .hero-shell{position:relative;overflow:hidden;border-bottom:1px solid var(--line);}
+  .hero-shell::before{content:'';position:absolute;inset:0;pointer-events:none;
+    background-image:linear-gradient(var(--line) 1px,transparent 1px),linear-gradient(90deg,var(--line) 1px,transparent 1px);
+    background-size:44px 44px;
+    -webkit-mask-image:radial-gradient(ellipse 70% 60% at 50% 40%,#000 30%,transparent 75%);
+            mask-image:radial-gradient(ellipse 70% 60% at 50% 40%,#000 30%,transparent 75%);
+    opacity:0.6;}
+  .hero-shell::after{content:'';position:absolute;width:620px;height:620px;right:-120px;top:-160px;pointer-events:none;
+    background:radial-gradient(circle,var(--glow),transparent 65%);filter:blur(20px);animation:drift 14s ease-in-out infinite alternate;}
+  @keyframes drift{to{transform:translate(-80px,60px);}}
+  .hero{position:relative;z-index:1;}
+  .hero h1{font-size:58px;}
+  .hero h1 span{background:linear-gradient(90deg,var(--accent),#ff9a8b);-webkit-background-clip:text;background-clip:text;color:transparent;}
+
+  .hero-eyebrow{display:inline-flex;align-items:center;gap:8px;padding:6px 12px;border:1px solid var(--line);
+    border-radius:999px;background-color:var(--surface);color:var(--ink);}
+  .hero-eyebrow .prompt{color:var(--accent);}
+  .status-dot{width:7px;height:7px;border-radius:50%;background:#3ddc84;box-shadow:0 0 0 0 rgba(61,220,132,0.6);animation:ping 2s infinite;}
+  @keyframes ping{70%{box-shadow:0 0 0 8px rgba(61,220,132,0);}100%{box-shadow:0 0 0 0 rgba(61,220,132,0);}}
+
+  .stat-row{display:flex;flex-wrap:wrap;gap:28px;margin-top:36px;padding-top:24px;border-top:1px dashed var(--line);}
+  .stat .n{font-family:var(--display);font-weight:700;font-size:20px;}
+  .stat .l{font-family:var(--mono);font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:0.06em;}
+
+  .btn{transition:all 0.2s ease;}
+  .btn.primary{box-shadow:0 8px 24px -8px var(--glow);}
+  .btn.primary:hover{background-color:var(--accent);filter:brightness(1.1);transform:translateY(-1px);box-shadow:0 12px 30px -8px var(--glow);}
+  .submit-btn:hover{background-color:var(--accent);filter:brightness(1.1);}
+
+  .hero-panel{position:relative;background:linear-gradient(160deg,var(--card-bg),var(--surface));
+    box-shadow:0 30px 80px -30px rgba(0,0,0,0.5);}
+  .hero-panel::before{content:'';position:absolute;inset:-1px;border-radius:12px;padding:1px;pointer-events:none;
+    background:linear-gradient(140deg,var(--accent),transparent 40%,transparent 60%,var(--accent));
+    -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude;opacity:0.7;}
+  .hero-photo-placeholder{box-shadow:0 0 0 6px var(--accent-soft),0 0 40px var(--glow);}
+
+  /* section headings */
+  h2{font-size:36px;}
+  h2::after{content:'';display:block;width:48px;height:3px;margin-top:14px;border-radius:3px;
+    background:linear-gradient(90deg,var(--accent),transparent);}
+
+  /* cards: glass + cursor spotlight */
+  .project-card,.info-card{position:relative;overflow:hidden;border-radius:12px;
+    transition:transform 0.25s ease,border-color 0.25s ease,box-shadow 0.25s ease;}
+  .project-card::before,.info-card::before{content:'';position:absolute;inset:0;pointer-events:none;opacity:0;transition:opacity 0.3s ease;
+    background:radial-gradient(400px circle at var(--mx,50%) var(--my,50%),var(--accent-soft),transparent 45%);}
+  .project-card:hover,.info-card:hover{transform:translateY(-4px);border-color:color-mix(in srgb,var(--accent) 55%,var(--line));
+    box-shadow:0 20px 40px -20px var(--glow);}
+  .project-card:hover::before,.info-card:hover::before{opacity:1;}
+  .project-card > *,.info-card > *{position:relative;}
+
+  .tag{transition:border-color 0.2s ease,color 0.2s ease,transform 0.2s ease;}
+  .tag:hover{border-color:var(--accent);color:var(--accent);transform:translateY(-1px);}
+  .skills-group{border:1px solid var(--line);border-radius:12px;padding:22px 24px;background-color:var(--card-bg);}
+  .skills-group h3::before{content:'# ';color:var(--accent);}
+
+  /* timeline glow */
+  .timeline{border-left:none;position:relative;}
+  .timeline::before{content:'';position:absolute;left:0;top:6px;bottom:6px;width:2px;
+    background:linear-gradient(var(--accent),var(--line) 30%,var(--line));}
+  .timeline-item::before{left:-33px;width:12px;height:12px;box-shadow:0 0 0 4px var(--accent-soft);}
+  .timeline-item:first-child::before{animation:pulse 2.4s ease-in-out infinite;}
+  @keyframes pulse{50%{box-shadow:0 0 0 8px var(--accent-soft),0 0 18px var(--glow);}}
+  .timeline-item:first-child h3::after{content:'CURRENT';margin-left:10px;padding:2px 8px;border-radius:999px;vertical-align:3px;
+    font-family:var(--mono);font-size:10px;letter-spacing:0.08em;color:var(--accent);background:var(--accent-soft);}
+
+  footer::before{content:'$ ';color:var(--accent);}
+
+  @media (max-width:860px){
+    .hero h1{font-size:40px;}
+    h2{font-size:28px;}
+    .hero-shell::after{width:380px;height:380px;}
+  }
 </style>
 </head>
 <body>
@@ -231,9 +319,11 @@
   </div>
 </nav>
 
+<div class="scroll-progress" id="scroll-progress"></div>
+<div class="hero-shell">
 <div class="hero" id="about">
   <div>
-    <div class="hero-eyebrow" id="typewriter"><span class="type-cursor"></span></div>
+    <div class="hero-eyebrow"><span class="status-dot"></span><span class="prompt">~$</span><span id="typewriter"><span class="type-cursor"></span></span></div>
     <h1>Writing code and testing to keep <span>secure systems</span> running.</h1>
     <p>
       My core languages are Python and C++, with SQL close behind for working
@@ -247,6 +337,11 @@
     <div class="hero-actions">
       <a class="btn primary" href="#projects">View projects</a>
       <a class="btn" href="#contact">Get in touch</a>
+    </div>
+    <div class="stat-row">
+      <div class="stat"><div class="n">Torc Robotics</div><div class="l">Cybersecurity Eng.</div></div>
+      <div class="stat"><div class="n">M.S.</div><div class="l">Cybersecurity</div></div>
+      <div class="stat"><div class="n">App Store</div><div class="l">QuickVolt live</div></div>
     </div>
   </div>
   <div class="hero-panel">
@@ -269,6 +364,8 @@
       </a>
     </div>
   </div>
+</div>
+
 </div>
 
 <section id="experience">
@@ -529,8 +626,8 @@
       accent:'#B23A3A', accentSoft:'#F5E6E6', line:'#EAEAE7', cardBg:'#FFFFFF'
     },
     dark: {
-      bg:'#16171A', surface:'#1F2023', ink:'#F2F1EE', muted:'#9A9C9F',
-      accent:'#E2585A', accentSoft:'rgba(226,88,90,0.15)', line:'#2B2C30', cardBg:'#1D1E21'
+      bg:'#0D0E11', surface:'#16171B', ink:'#F2F1EE', muted:'#9A9C9F',
+      accent:'#E2585A', accentSoft:'rgba(226,88,90,0.15)', line:'#24252B', cardBg:'#121317'
     }
   };
 
@@ -645,6 +742,22 @@
   }, {threshold:0.1});
 
   document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+
+  // Scroll progress bar
+  const progressEl = document.getElementById('scroll-progress');
+  window.addEventListener('scroll', () => {
+    const max = document.documentElement.scrollHeight - window.innerHeight;
+    progressEl.style.width = (max > 0 ? (window.scrollY / max) * 100 : 0) + '%';
+  }, {passive:true});
+
+  // Cursor spotlight on cards
+  document.querySelectorAll('.project-card, .info-card').forEach(card => {
+    card.addEventListener('pointermove', (e) => {
+      const r = card.getBoundingClientRect();
+      card.style.setProperty('--mx', (e.clientX - r.left) + 'px');
+      card.style.setProperty('--my', (e.clientY - r.top) + 'px');
+    });
+  });
 </script>
 
 </body>
